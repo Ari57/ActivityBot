@@ -2,8 +2,8 @@ name: Python application
 
 on:
   schedule:
-    - cron: '0 0 * * *'   # 12 AM UTC every day
-  workflow_dispatch:
+    - cron: '5 0 * * *'  # 12:05 AM UTC every day  
+  workflow_dispatch: # Allows manual triggering via a button
 
 permissions:
   contents: read
@@ -30,6 +30,5 @@ jobs:
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
           
       run: |
-          echo "$GOOGLE_SHEETS_CREDENTIALS"
           python bot.py
           

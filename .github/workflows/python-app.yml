@@ -5,6 +5,7 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch: # Allows manual triggering via a button
 
 permissions:
   contents: read
@@ -29,5 +30,8 @@ jobs:
       env:
           GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          
       run: |
+          echo "$GOOGLE_SHEETS_CREDENTIALS"
           python bot.py
+          

@@ -25,6 +25,7 @@ jobs:
         pip install discord.py gspread oauth2client python-dotenv
 
     - name: Run Python script
-    env:
-      DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
-      run: python your_script.py
+      env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+      run: |
+          python bot.py

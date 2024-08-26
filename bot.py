@@ -2,10 +2,12 @@ import logging
 import discord
 import gspread
 import os
+import json
 from discord.ext import commands
 from dotenv import load_dotenv
+from gspread import service_account
 from oauth2client.service_account import ServiceAccountCredentials
-
+from google.oauth2 import service_account
 load_dotenv()
 
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
@@ -28,7 +30,9 @@ logging.basicConfig(level=logging.INFO)
 def GetGoogleSheet(spreadsheet):
     try:
         scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-        creds = ServiceAccountCredentials.from_json_keyfile_name(GOOGLE_SHEET_CREDENTIALS, scope)
+        CredsInfo = json.loads(GOOGLE_SHEET_CREDENTIALS)
+        creds = service_account.Credentials.from_service_account_info(CredsInfo, scopes=scope)
+       # creds = ServiceAccountCredentials.from_json_keyfile_name(GOOGLE_SHEET_CREDENTIALS, scope)
         client = gspread.authorize(creds)
         if spreadsheet == "leadership":
             sheet = client.open_by_key(INQ_LEADERSHIP_SHEET_ID).worksheet(INQ_LEADERSHIP_SHEET_NAME)
@@ -57,6 +61,10 @@ def CheckLoa():
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user.name}')
+
+@bot.command(name="shutdown")
+async def shut_down(ctx):
+    print("e") # TODO add shutdown command
 
 @bot.command(name="readcell")
 async def read_cell(ctx):

@@ -29,5 +29,8 @@ jobs:
       env:
           GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          
       run: |
+        echo "$GOOGLE_SHEET_CREDENTIALS"
           python bot.py
+          

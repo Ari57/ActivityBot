@@ -1,11 +1,9 @@
 name: Python application
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-  workflow_dispatch: # Allows manual triggering via a button
+  schedule:
+    - cron: '0 0 * * *'   # 12 AM UTC every day
+  workflow_dispatch:
 
 permissions:
   contents: read

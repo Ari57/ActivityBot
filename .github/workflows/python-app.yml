@@ -31,6 +31,6 @@ jobs:
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
           
       run: |
-        echo "$GOOGLE_SHEET_CREDENTIALS"
+          echo "$GOOGLE_SHEETS_CREDENTIALS"
           python bot.py
           

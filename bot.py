@@ -12,6 +12,7 @@ load_dotenv()
 
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 GOOGLE_SHEET_CREDENTIALS = os.getenv("GOOGLE_SHEETS_CREDENTIALS")
+ALLOWED_USER_IDS = [163199994919256064]
 
 # TODO update variables and ask Painite if we can use the bot
 INQ_LEADERSHIP_SHEET_NAME = "Inquisitor Order"
@@ -63,8 +64,13 @@ async def on_ready():
     print(f'Logged in as {bot.user.name}')
 
 @bot.command(name="shutdown")
-async def shut_down(ctx):
-    print("e") # TODO add shutdown command
+@commands.is_owner()
+async def shutdown(ctx):
+    if ctx.author.id in ALLOWED_USER_IDS:
+        await ctx.send("Shutting down the bot")
+        await bot.close()
+    else:
+        await ctx.send("You don't have permission to shut down the bot")
 
 @bot.command(name="readcell")
 async def read_cell(ctx):

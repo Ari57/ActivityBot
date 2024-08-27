@@ -14,10 +14,9 @@ DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 GOOGLE_SHEET_CREDENTIALS = os.getenv("GOOGLE_SHEETS_CREDENTIALS")
 ALLOWED_USER_IDS = [163199994919256064]
 
-# TODO update variables
 INQ_LEADERSHIP_SHEET_NAME = "Inquisitor Order"
-INQ_LEADERSHIP_SHEET_ID = "1QMduATDD2o0XG8P3gqMN7kVtPIpCGH_UEq3sgkwbAb8"
-INQ_PUBLIC_SHEET_ID = "15Ae2gh1rHMZx6WAm0tvCGqNHvYdtWjPl6rrQEpiDKB8"
+INQ_LEADERSHIP_SHEET_ID = "1qZh4wRgSaN8FQXFLZOazSACESSVfWAdAmqOcB66DWDs"
+INQ_PUBLIC_SHEET_ID = "1b6u92zn9pf_xJpxy_t4VYon7zvFVtiOEpYz9XefgatM"
 INQ_PUBLIC_SHEET_NAME = "Public Roster"
 CHANNEL_NAME = "inactivity-discussion"
 
@@ -52,7 +51,7 @@ def CheckLoa():
 
     for row in rows:
         name = row[2]
-        loa = row[17]
+        loa = row[18]
         if name != "" and name != "Name" and name != "dont delete":
             if loa != "ROA" and loa != "LOA":
                 names.append(name)
@@ -81,7 +80,11 @@ async def check_activity():
     DaysSinceColumn = sheet.col_values(12)
 
     NonLoaNames = CheckLoa()
-    output = []
+
+    OverNineDays = []
+    NineDays = []
+    EightDays = []
+    SevenDays = []
 
     for name, DiscordId, DaysSince in zip(NameColumn, DiscordIDColumn, DaysSinceColumn):
         if name != "" and name != "Name" and name != "dont delete":
@@ -91,21 +94,25 @@ async def check_activity():
             try:
                 if DaysSince.isdigit():
                         DaysSince = int(DaysSince)
-                if DaysSince >= 9:
-                    output.append(f"0 days: <@{DiscordId}>")
+                if DaysSince > 9:
+                    OverNineDays.append(f"Inactive: <@{DiscordId}>")
+                elif DaysSince == 9:
+                    NineDays.append(f"0 days: <@{DiscordId}>")
                 elif DaysSince == 8:
-                    output.append(f"1 day: <@{DiscordId}>")
+                    EightDays.append(f"1 day: <@{DiscordId}>")
                 elif DaysSince == 7:
-                    output.append(f"2 days: <@{DiscordId}>")
+                    SevenDays.append(f"2 days: <@{DiscordId}>")
 
             except TypeError as e:
                 logging.error(f"Unable to convert DaysSince value for {name}: {e}")
+
+    output = OverNineDays + NineDays + EightDays + SevenDays
 
     if output:
         response = "\n".join(output)
         channel = discord.utils.get(bot.get_all_channels(), name=CHANNEL_NAME)
         if channel:
-            await channel.send(f"\n{response}\n\nIf there are any problems please DM a member of the Inquisitorious!")
+            await channel.send(f"\n{response}\n\nPlease participate in an event or training to update your activity, if there are any problems please DM a member of the Inquisitorious!")
         else:
             logging.error(f"Unable to find channel: {CHANNEL_NAME}")
 

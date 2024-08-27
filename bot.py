@@ -6,8 +6,8 @@ import json
 from discord.ext import commands
 from dotenv import load_dotenv
 from gspread import service_account
-from oauth2client.service_account import ServiceAccountCredentials
 from google.oauth2 import service_account
+
 load_dotenv()
 
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
@@ -19,6 +19,8 @@ INQ_LEADERSHIP_SHEET_NAME = "Inquisitor Order"
 INQ_LEADERSHIP_SHEET_ID = "1QMduATDD2o0XG8P3gqMN7kVtPIpCGH_UEq3sgkwbAb8"
 INQ_PUBLIC_SHEET_ID = "15Ae2gh1rHMZx6WAm0tvCGqNHvYdtWjPl6rrQEpiDKB8"
 INQ_PUBLIC_SHEET_NAME = "Public Roster"
+
+CHANNEL_NAME = "inactivity-discussion"
 
 intents = discord.Intents.default()
 intents.messages = True
@@ -62,6 +64,7 @@ def CheckLoa():
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user.name}')
+    await read_cell()
 
 @bot.command(name="shutdown")
 @commands.is_owner()
@@ -72,8 +75,7 @@ async def shutdown(ctx):
     else:
         await ctx.send("You don't have permission to shut down the bot")
 
-@bot.command(name="readcell")
-async def read_cell(ctx):
+async def read_cell():
     sheet = GetGoogleSheet("leadership")
     NameColumn = sheet.col_values(7)
     DiscordIDColumn = sheet.col_values(11) # TODO change to use letters
@@ -92,9 +94,9 @@ async def read_cell(ctx):
                         DaysSince = int(DaysSince)
                 if DaysSince >= 9:
                     output.append(f"0 days: <@{DiscordId}>")
-                elif DaysSince >= 8:
+                elif DaysSince == 8:
                     output.append(f"1 day: <@{DiscordId}>")
-                elif DaysSince >= 7:
+                elif DaysSince == 7:
                     output.append(f"2 days: <@{DiscordId}>")
 
             except TypeError as e:
@@ -102,6 +104,10 @@ async def read_cell(ctx):
 
     if output:
         response = "\n".join(output)
-        await ctx.send(f"\n{response}\n\nIf there are any problems please DM a member of the Inquisitorious!")
+        channel = discord.utils.get(bot.get_all_channels(), name=CHANNEL_NAME)
+        if channel:
+            await channel.send(f"\n{response}\n\nIf there are any problems please DM a member of the Inquisitorious!")
+        else:
+            logging.error(f"Unable to find channel: {CHANNEL_NAME}")
 
 bot.run(DISCORD_TOKEN)

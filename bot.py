@@ -3,6 +3,7 @@ import discord
 import gspread
 import os
 import json
+import sys
 from discord.ext import commands
 from dotenv import load_dotenv
 from gspread import service_account
@@ -18,7 +19,13 @@ INQ_LEADERSHIP_SHEET_NAME = "Inquisitor Order"
 INQ_LEADERSHIP_SHEET_ID = "1qZh4wRgSaN8FQXFLZOazSACESSVfWAdAmqOcB66DWDs"
 INQ_PUBLIC_SHEET_ID = "1b6u92zn9pf_xJpxy_t4VYon7zvFVtiOEpYz9XefgatM"
 INQ_PUBLIC_SHEET_NAME = "Public Roster"
-CHANNEL_NAME = "inactivity-discussion"
+
+testing = sys.argv[1]
+
+if testing == "Y":
+    CHANNEL_NAME = "inactivity-discussion-testing"
+else:
+    CHANNEL_NAME = "inactivity-discussion"
 
 intents = discord.Intents.default()
 intents.messages = True

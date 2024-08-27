@@ -29,4 +29,4 @@ jobs:
           GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
       run: |
-          python bot.py
+          python bot.py N

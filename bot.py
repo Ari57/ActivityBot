@@ -19,7 +19,6 @@ INQ_LEADERSHIP_SHEET_NAME = "Inquisitor Order"
 INQ_LEADERSHIP_SHEET_ID = "1QMduATDD2o0XG8P3gqMN7kVtPIpCGH_UEq3sgkwbAb8"
 INQ_PUBLIC_SHEET_ID = "15Ae2gh1rHMZx6WAm0tvCGqNHvYdtWjPl6rrQEpiDKB8"
 INQ_PUBLIC_SHEET_NAME = "Public Roster"
-
 CHANNEL_NAME = "inactivity-discussion"
 
 intents = discord.Intents.default()
@@ -62,7 +61,7 @@ def CheckLoa():
 
 @bot.event
 async def on_ready():
-    print(f'Logged in as {bot.user.name}')
+    logging.info(f'Logged in as {bot.user.name}')
     await check_activity()
     await bot.close()
 

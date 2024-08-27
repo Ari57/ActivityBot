@@ -65,6 +65,7 @@ def CheckLoa():
 async def on_ready():
     print(f'Logged in as {bot.user.name}')
     await read_cell()
+    await bot.close()
 
 @bot.command(name="shutdown")
 @commands.is_owner()

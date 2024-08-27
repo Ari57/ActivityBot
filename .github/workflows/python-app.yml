@@ -2,7 +2,7 @@ name: Python application
 
 on:
   schedule:
-    - cron: '0 11 * * *'  # Runs at 12 PM UTC every day
+    - cron: '0 11 * * *'  # Runs at 11 am UTC every day
   workflow_dispatch: # Allows manual triggering via a button
 
 permissions:

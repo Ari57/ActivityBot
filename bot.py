@@ -119,7 +119,7 @@ async def check_activity():
         response = "\n".join(output)
         channel = discord.utils.get(bot.get_all_channels(), name=CHANNEL_NAME)
         if channel:
-            await channel.send(f"\n{response}\n\nPlease participate in an event or training to update your activity, if there are any problems DM a member of the Inquisitorious@@")
+            await channel.send(f"\n{response}\n\nPlease participate in an event or training to update your activity, if there are any problems DM a member of the Inquisitorious")
         else:
             logging.error(f"Unable to find channel: {CHANNEL_NAME}")
 

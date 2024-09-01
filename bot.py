@@ -35,6 +35,7 @@ intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 logging.basicConfig(level=logging.INFO)
 
+
 def GetGoogleSheet(spreadsheet):
     try:
         scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
@@ -51,6 +52,7 @@ def GetGoogleSheet(spreadsheet):
         logging.error(f"Error accessing Google Sheet: {e}")
         return None
 
+
 def CheckLoa():
     sheet = GetGoogleSheet("public")
     names = []
@@ -65,11 +67,13 @@ def CheckLoa():
 
     return names
 
+
 @bot.event
 async def on_ready():
     logging.info(f'Logged in as {bot.user.name}')
     await check_activity()
     await bot.close()
+
 
 @bot.command(name="shutdown")
 @commands.is_owner()
@@ -80,10 +84,11 @@ async def shutdown(ctx):
     else:
         await ctx.send("You don't have permission to shut down the bot")
 
+
 async def check_activity():
     sheet = GetGoogleSheet("leadership")
     NameColumn = sheet.col_values(7)
-    DiscordIDColumn = sheet.col_values(11) # TODO change to use letters
+    DiscordIDColumn = sheet.col_values(11)  # TODO change to use letters
     DaysSinceColumn = sheet.col_values(12)
 
     NonLoaNames = CheckLoa()
@@ -100,27 +105,38 @@ async def check_activity():
 
             try:
                 if DaysSince.isdigit():
-                        DaysSince = int(DaysSince)
-                if DaysSince > 9:
-                    OverNineDays.append(f"Inactive: <@{DiscordId}>")
-                elif DaysSince == 9:
-                    NineDays.append(f"0 days: <@{DiscordId}>")
-                elif DaysSince == 8:
-                    EightDays.append(f"1 day: <@{DiscordId}>")
-                elif DaysSince == 7:
-                    SevenDays.append(f"2 days: <@{DiscordId}>")
+                    DaysSince = int(DaysSince)
+                    if DaysSince > 9:
+                        OverNineDays.append(f"<@{DiscordId}>")
+                    elif DaysSince == 9:
+                        NineDays.append(f"<@{DiscordId}>")
+                    elif DaysSince == 8:
+                        EightDays.append(f"<@{DiscordId}>")
+                    elif DaysSince == 7:
+                        SevenDays.append(f"<@{DiscordId}>")
 
             except TypeError as e:
                 logging.error(f"Unable to convert DaysSince value for {name}: {e}")
 
-    output = OverNineDays + NineDays + EightDays + SevenDays
+    output = []
+
+    if SevenDays:
+        output.append(f"2 days: {' '.join(SevenDays)}")
+    if EightDays:
+        output.append(f"1 day: {' '.join(EightDays)}")
+    if NineDays:
+        output.append(f"0 days: {' '.join(NineDays)}")
+    if OverNineDays:
+        output.append(f"Inactive: {' '.join(OverNineDays)}")
 
     if output:
         response = "\n".join(output)
         channel = discord.utils.get(bot.get_all_channels(), name=CHANNEL_NAME)
         if channel:
-            await channel.send(f"\n{response}\n\nPlease participate in an event or training to update your activity, if there are any problems DM a member of the Inquisitorious")
+            await channel.send(
+                f"\n{response}\n\nPlease participate in an event or training to update your activity, if there are any problems DM a member of the Inquisitorious")
         else:
             logging.error(f"Unable to find channel: {CHANNEL_NAME}")
+
 
 bot.run(DISCORD_TOKEN)

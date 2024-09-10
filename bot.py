@@ -124,8 +124,6 @@ async def check_activity():
         output.append(f"2 days: {' '.join(SevenDays)}")
     if EightDays:
         output.append(f"1 day: {' '.join(EightDays)}")
-    if NineDays:
-        output.append(f"0 days: {' '.join(NineDays)}")
     if OverNineDays:
         output.append(f"Inactive: {' '.join(OverNineDays)}")
 
@@ -133,8 +131,12 @@ async def check_activity():
         response = "\n".join(output)
         channel = discord.utils.get(bot.get_all_channels(), name=CHANNEL_NAME)
         if channel:
-            await channel.send(
-                f"\n{response}\n\nPlease participate in an event or training to update your activity, if there are any problems DM a member of the Inquisitorious")
+            message = f"\n{response}\n\nPlease participate in an event or training to update your activity, if there are any problems DM a member of the Inquisitorious\n"
+
+            if NineDays:
+                message += f"\n{' '.join(NineDays)} You will be removed if you do not come on for an event or training today"
+            await channel.send(message)
+
         else:
             logging.error(f"Unable to find channel: {CHANNEL_NAME}")
 

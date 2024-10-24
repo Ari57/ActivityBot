@@ -17,8 +17,8 @@ ALLOWED_USER_IDS = [163199994919256064]
 
 INQ_LEADERSHIP_SHEET_NAME = "Inquisitor Order"
 INQ_LEADERSHIP_SHEET_ID = "1qZh4wRgSaN8FQXFLZOazSACESSVfWAdAmqOcB66DWDs"
-INQ_PUBLIC_SHEET_ID = "1b6u92zn9pf_xJpxy_t4VYon7zvFVtiOEpYz9XefgatM"
 INQ_PUBLIC_SHEET_NAME = "Public Roster"
+INQ_PUBLIC_SHEET_ID = "1b6u92zn9pf_xJpxy_t4VYon7zvFVtiOEpYz9XefgatM"
 
 testing = sys.argv[1]
 
@@ -35,7 +35,6 @@ intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 logging.basicConfig(level=logging.INFO)
 
-
 def GetGoogleSheet(spreadsheet):
     try:
         scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
@@ -51,7 +50,6 @@ def GetGoogleSheet(spreadsheet):
     except Exception as e:
         logging.error(f"Error accessing Google Sheet: {e}")
         return None
-
 
 def CheckLoa():
     sheet = GetGoogleSheet("public")
@@ -83,7 +81,6 @@ async def shutdown(ctx):
         await bot.close()
     else:
         await ctx.send("You don't have permission to shut down the bot")
-
 
 async def check_activity():
     sheet = GetGoogleSheet("leadership")

@@ -58,7 +58,7 @@ def CheckLoa():
 
     for row in rows:
         name = row[2]
-        loa = row[18]
+        loa = row[17]
         if name != "" and name != "Name" and name != "dont delete":
             if loa != "ROA" and loa != "LOA":
                 names.append(name)

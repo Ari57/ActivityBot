@@ -130,7 +130,7 @@ async def check_activity():
         response = "\n".join(output)
         channel = discord.utils.get(bot.get_all_channels(), name=CHANNEL_NAME)
         if channel:
-            message = f"\n{response}\n\nPlease participate in an event or training to update your activity, if there are any problems DM a member of the Inquisitorious\n"
+            message = f"\n{response}\n\nPlease participate in an event or training to update your activity, if there are any problems DM a member of the Eternal Council\n"
             if NineDays:
                 message += f"\n{' '.join(NineDays)} You will be removed if you do not come on for an event or training today"
             await channel.send(message)
